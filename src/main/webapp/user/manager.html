@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+    
+    <title>Manage Reimbursements</title>
+    
+    <script></script>
+    <style>
+
+     body{
+  
+     margin:0;
+   
+  
+     color: #00ff22;
+	 background:#c8c8c8;
+	 font:700 16px/18px 'Open Sans',sans-serif;
+	background-image: url(https://media.giphy.com/media/xT0xeAqBxu7wd3Ie0o/giphy.gif);
+	
+}
+
+     #approveRein{
+
+      /* padding: 8%; */
+
+     }
+
+     #reimID{
+/* 
+      padding: 5%; */
+       margin: 3%;
+     }
+     
+     
+     .jumbotron{
+
+      color: #008cff;
+      background-color: lightblue
+     } 
+
+    </style>
+    <script>
+    	function logout() {
+    		let xhr = new XMLHttpRequest();
+    		
+    		xhr.open("POST", "http://localhost:8080/pOne/logout");
+    		xhr.send();
+    		
+    		sessionStorage.clear();
+    	
+    		window.location = "http://localhost:8080/pOne/";
+    	}
+    </script>  
+</head>
+<body>
+    <div class="jumbotron">
+        <h1 id = "welcome" class="display-4">Hello!</h1>
+        <button onclick="logout()"  id="logout" class="btn btn-outline-dark" style="position: absolute; left: 10%; top: .7em; color: rgb(25, 110, 197);">Logout</button>
+        <script>
+            let welcome = document.getElementById('welcome');
+        
+            let userString = sessionStorage.getItem('currentUser');
+            if(userString === null) {
+               
+            } else {
+                let currentUser = JSON.parse(userString);
+                console.log(currentUser);
+                
+                if(currentUser != null) {
+                    welcome.innerHTML = "Welcome " + currentUser.firstName +"!";
+                }
+            }
+        </script>
+         
+        <p class="lead">to the Reimbursement Management System</p>
+        <hr class="my-4">
+      </div>
+     <div class="container">
+     <div class="container">
+    <div class="row">
+      <div class="col-sm">
+     
+      </div>
+      <div class="col-sm">
+    </div>
+    <div class="col-sm">
+      <table class="table table-hover table-striped" id="reimTable">
+          <thead>
+              <tr> 
+                  <th>Case ID#:</th>          
+                  <th>Submitted On:</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Resolver</th>
+                  <th>Resolved On:</th>
+              </tr>
+             
+          </thead>
+          <tbody id="ReimbursementTable">
+        
+
+          </tbody>
+
+      </table>
+    
+    </div>
+  
+
+        <div id="approveRein">
+
+            <form name="setReimbursementStatusForm" onSubmit="updateStatus(event.preventDefault())" style="border: 0;" enctype="multipart/form-data">
+                <div class="row">
+                    <input required id ="reimID" type="number" min= "1" placeholder="Reimbursement ID" class="col-lg-3 col-md-3 col-xs-12">
+                    <select required class="form-control col-lg-3 col-md-3 col-xs-12" name="statusNum">
+                        
+                        <option value="1">Approve</option>
+                        <option value="-1">Deny</option>
+                    </select>
+                    <input type="submit" class="btn btn-outline-dark" style = "background-color: rgb(0, 204, 255)">
+                </div>
+            </form>
+        </div>
+    </div>
+    
+   <script>
+  	//let displayname = document.getElementById('displayname');
+  	let reimbursementTable = document.getElementById('ReimbursementTable');
+  	let reimTable = document.getElementById('reimTable');
+
+  	
+  	if(userString === null) {
+  		window.location = "http://localhost:8080/pOne/"; 
+  		
+  	} else {
+  		let wholeUser = JSON.parse(userString);
+  		
+  		if(wholeUser != null) {
+  	
+  			console.log(wholeUser);
+  			
+  			let reims = wholeUser.userReimbursements;
+  			
+  			var c = reims[reims.length- 1].timeSub == reims[reims.length - 2].timeSub;
+  			
+  			console.log(c);
+  			console.log(!c);
+  			
+  			if(c){
+  	  			var i;
+  	  			for(i = 0; i < reims.length - 1; i++) {
+  	  				
+  	  				var tr = document.createElement('tr');
+  	  				
+  	  			    var s;
+	  		        
+	  		        if(reims[i].typeId == 0){
+	  		        
+	  		        s = "Food";	
+	
+	  		        }
+              if(reims[i].typeId==1){
+	  		        
+	  		        s = "Lodging";	
+	
+	  		        }
+              if(reims[i].typeId==2){		        
+	  		    s = "Travel";	
+	  		   }
+	  		        
+              if(reims[i].typeId==3){  		        
+    	  		    s = "Other";	           	
+    	  		   }
+              
+              var x;
+         
+              
+              if(reims[i].statusId == 0){
+               
+              x = "Open"
+             	 
+              }
+              
+              if(reims[i].statusId == 1){
+             	 
+              x =  "Denied"
+             	 
+              }
+              
+              if(reims[i].statusId == 2){
+             	 
+              x = "Approved"	
+             	 
+              }
+              
+              var l;
+            
+				if(reims[i].resolver== 1){
+					
+				l= "N/A";	
+					
+				}else{
+					
+			   	l= reims[i].resolver;
+				}
+  	  				
+  	  				
+  	  				tr.innerHTML = '<td>' + reims[i].reinbursementId + '</td>' +
+  	  				'<td>' + reims[i].timeSub + '</td>' +
+  	  				'<td>' + '$' + reims[i].amount + '</td>' +
+  	  				'<td>' + s + '</td>' +
+  	  				'<td>' + reims[i].desc + '</td>' +
+  	  				'<td>' + x + '</td>' +
+  	  				'<td>' + l + '</td>' +
+  	  				'<td>' + reims[i].timeRes + '</td>';
+  	  				reimbursementTable.appendChild(tr);
+  	  			};
+  	  			
+  	  			
+  	  		}
+  			
+  			
+  		
+  			if(!c){
+  			var i;
+  			for(i = 0; i < reims.length; i++) {
+  				
+  				var tr = document.createElement('tr');
+  				
+  				
+  				 
+	  		        var q;
+	  		        
+	  		        if(reims[i].typeId == 0){
+	  		        
+	  		        q = "Food";	
+ 	
+	  		        }
+                if(reims[i].typeId==1){
+	  		        
+	  		        q = "Lodging";	
+ 	
+	  		        }
+                if(reims[i].typeId==2){		        
+  	  		    q = "Travel";	
+  	  		   }
+	  		        
+                if(reims[i].typeId==3){  		        
+      	  		    q = "Other";	           	
+      	  		   }
+                
+                
+                var z;
+                
+                if(reims[i].statusId == 0){
+                 
+                z = "Open"
+               	 
+                }
+                
+                if(reims[i].statusId == 1){
+               	 
+                z =  "Denied"
+               	 
+                }
+                
+                if(reims[i].statusId == 2){
+               	 
+                z = "Approved"	
+               	 
+                }
+                
+                
+                var p;
+              
+ 				if(reims[i].resolver== 1){
+ 					
+ 				p = "N/A";	
+ 					
+ 				}else{
+ 					
+ 			   	p = reims[i].resolver;
+ 				}
+ 				
+              
+  				
+  				
+  				
+  				tr.innerHTML ='<td>' + reims[i].reinbursementId + '</td>' +
+  				'<td>' + reims[i].timeSub + '</td>' +
+  				'<td>' + '$' + reims[i].amount + '</td>' +
+  				'<td>' + q + '</td>' +
+  				'<td>' + reims[i].desc + '</td>' +
+  				'<td>' + z + '</td>' +
+  				'<td>' + p + '</td>' +
+  				'<td>' + reims[i].timeRes + '</td>';
+  				reimbursementTable.appendChild(tr);
+  			};
+  			
+  			
+  		}
+  		}	
+  	}
+  </script>  
+  
+   
+       
+       
+      
+      </div>
+</body>
