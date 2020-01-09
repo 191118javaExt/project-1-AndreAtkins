@@ -13,21 +13,32 @@ public class ReimbursementDTO {
 	
 	private int reimid;
 	
+	byte [] receipt;
+	
 	
 	 public ReimbursementDTO() {
 	        super();
 	    }
 	 
 	
-	public ReimbursementDTO (double amount, String descr, int typeId, int reimid) {
+	public ReimbursementDTO (double amount, String descr, int typeId, int reimid, byte [] receipt) {
 		
 		this.amount = amount;
 		this.descr = descr;
 		this.typeId =typeId;
 		this.reimid = reimid;
-	
+	    this.receipt = receipt;
 	}
 
+	public 	byte []  getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(byte [] receipt) {
+		this.receipt = receipt;
+	}
+	
+	
 	public int getTypeId() {
 		return typeId;
 	}

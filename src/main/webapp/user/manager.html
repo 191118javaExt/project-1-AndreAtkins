@@ -117,13 +117,13 @@
 
         <div id="approveRein">
 
-            <form name="setReimbursementStatusForm" onSubmit="updateStatus(event.preventDefault())" style="border: 0;" enctype="multipart/form-data">
+            <form name="setReimbursementStatusForm" onSubmit="changeStatus(event.preventDefault())" style="border: 0;" enctype="multipart/form-data">
                 <div class="row">
                     <input required id ="reimID" type="number" min= "1" placeholder="Reimbursement ID" class="col-lg-3 col-md-3 col-xs-12">
-                    <select required class="form-control col-lg-3 col-md-3 col-xs-12" name="statusNum">
+                    <select required id = "selectstatus" class="form-control col-lg-3 col-md-3 col-xs-12" name="statusNum">
                         
-                        <option value="1">Approve</option>
-                        <option value="-1">Deny</option>
+                        <option value="2">Approve</option>
+                        <option value="1">Deny</option>
                     </select>
                     <input type="submit" class="btn btn-outline-dark" style = "background-color: rgb(0, 204, 255)">
                 </div>
@@ -132,7 +132,7 @@
     </div>
     
    <script>
-  	//let displayname = document.getElementById('displayname');
+  
   	let reimbursementTable = document.getElementById('ReimbursementTable');
   	let reimTable = document.getElementById('reimTable');
 
@@ -310,6 +310,43 @@
   		}	
   	}
   </script>  
+  <script>
+  
+  function changeStatus(){
+	  
+	  let idbox = document.getElementById('reimID');
+	  let statusbox = document.getElementById('selectstatus');
+
+	  let id = idbox.value;
+	  let status = statusbox.value;
+	  
+	  let updateObject = {
+				id: id,
+				status: status,
+		}
+	  console.log(updateObject);
+
+	  let xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if((this.readyState === 4) && (this.status === 200)) {
+				alert("Reimbursement has been changed");
+				
+				
+			} 
+			if((this.readyState === 4) && (this.status != 200))  {
+				alert("Unable to update status.")
+			}
+		}
+		xhr.open("POST", "http://localhost:8080/pOne/status");
+		xhr.send(JSON.stringify(updateObject));
+	}
+	  
+  
+  
+  
+  
+  
+  </script>
   
    
        

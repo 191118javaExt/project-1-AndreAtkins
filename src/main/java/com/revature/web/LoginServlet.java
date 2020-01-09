@@ -49,15 +49,23 @@ public static ArrayList<Reinbursements> rlist = UserServices.getAllReinbursement
 		System.out.println(body);
 		LoginTemplate loginAttempt = om.readValue(body, LoginTemplate.class);
 		String username = loginAttempt.getUsername();
-		String password = loginAttempt.getPassword();
+		
+		
+		String unpassword = loginAttempt.getPassword();
+		
+		int pass = unpassword.hashCode();
+		String password = Integer.toString(pass);
 		System.out.println(username+password);
 		
-		//logger.info("User attempted to login with username " + username);
+	
 		UserServices us = new UserServices();
 		
 		boolean y = us.IsUser(username);
 		
 		boolean z = false;
+		
+		
+		System.out.println(y   +" hashcheck" + z);
 			
 		if(y) {
 			
@@ -78,7 +86,7 @@ public static ArrayList<Reinbursements> rlist = UserServices.getAllReinbursement
 			
 			Users user1 = usermap.get(username);
 		
-			//int role = user1.getRoleId();
+		
 			
 			boolean v = UserServices.isManager(username);
 			
@@ -112,9 +120,10 @@ public static ArrayList<Reinbursements> rlist = UserServices.getAllReinbursement
 			
 			if(!v) {
 			
+		ArrayList<Reinbursements> rlist4 = UserServices.getReinbursementsForUser(UserServices.getIdByUsername(username));
 			
 			HttpSession session = req.getSession();
-			// Gets the current session, or creates one if it did not exist
+			
 			session.setAttribute("user", username);
 		    
 			session.setAttribute("userID", UserServices.getIdByUsername(username));
@@ -123,11 +132,10 @@ public static ArrayList<Reinbursements> rlist = UserServices.getAllReinbursement
 			
 			res.setContentType("application/json");	
 			
-			
-			
+				
 		    EmployeeDTO dto = UserServices.convertToDTO(user1);
 			
-		    //session.setAttribute("obj", dto);
+			dto.setUserReim(rlist4);
 	      
 			out1.println(om.writeValueAsString((dto)));
 			}	

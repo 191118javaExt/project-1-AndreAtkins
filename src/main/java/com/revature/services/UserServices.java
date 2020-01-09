@@ -125,13 +125,23 @@ public class UserServices {
 		
  
  
+
  
- 
- public HashMap<Integer, Reinbursements> getReimByIdMap(){
+ public static HashMap<Integer, Reinbursements> getReimByIdMap(){
 	 
 	 
 	 
 	 return rd.getReimByIdMap();
+	 
+ }
+ 
+ public static Reinbursements getReById(int id) {
+
+	 HashMap<Integer, Reinbursements> remap =  getReimByIdMap();
+	
+	 Reinbursements rein = remap.get(id);
+	 
+	 return rein;
 	 
  }
 
@@ -155,12 +165,12 @@ public class UserServices {
 	return reinlist2;
 	}
  
+
  
- 
-   public Reinbursements createReinbursement(ReimbursementDTO dto, int author) {
+ public Reinbursements createReinbursement(ReimbursementDTO dto, int author) {
 	
 	   
-	   Reinbursements rein = new Reinbursements(0,dto.getAmount(), createSumbmissionTime(), "N/A", dto.getDescr(), author, 1,0, dto.getTypeId(), null);
+	   Reinbursements rein = new Reinbursements(0,dto.getAmount(), createSumbmissionTime(), "N/A", dto.getDescr(), author, 1,0, dto.getTypeId(), dto.getReceipt());
 	   
 	   
 	   return rein;
@@ -170,7 +180,7 @@ public class UserServices {
    }
    
 	
-	public String createSumbmissionTime() {
+	public static String createSumbmissionTime() {
 		
 		Date dateObj = new Date();
 		
@@ -181,7 +191,31 @@ public class UserServices {
 		return simpleDF.format(dateObj);
 	}
  
- 
+	 
+	 public static boolean updateStatus(int id, int status , int resolver) {
+		
+		 
+		Reinbursements re = getReById(id);
+		re.setStatusId(status);
+		re.setResolver(resolver);
+		re.setTimeRes(createSumbmissionTime());
+		
+		if(rd.updateReinbursement(re)) {
+			return true;
+		} else {
+			
+		
+	 
+		 return false;
+		 
+		}
+	 }
+	   
+	 
+	 
+	
+	
+	
 	public static HashMap<String, Integer> getIdMap() {
 		
 		return ud.getIdMap();

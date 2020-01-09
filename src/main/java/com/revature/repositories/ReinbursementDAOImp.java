@@ -1,4 +1,4 @@
-package com.revature.repositories;
+	package com.revature.repositories;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -70,9 +70,9 @@ public class ReinbursementDAOImp implements ReinbursementDAO{
 					// This String represents the SQL which we will execute on our database
 					// We use ?'s as placeholders, which we can insert values from Java using
 					// PreparedStatements
-		    String sql = "UPDATE \"Project1\".reinbursements (rein_amount, rein_resolved, "
-		    		+ "rein_submitted, rein_description, rein_receipt, rein_author, rein_resolver, "
-		    		+ "rein_statusId, rein_typeID ) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		    String sql = "UPDATE \"Project1\".reinbursements SET rein_amount = (?), rein_resolved = (?), "
+		    		+ "rein_submitted = (?), rein_description = (?), rein_receipt = (?), rein_author = (?), rein_resolver = (?), "
+		    		+ "rein_statusId = (?), rein_typeID = (?) WHERE rein_id = (?);";
 					
 					// This PreparedStatement object is a wrapper around our SQL string
 					// And is obtained through our connection to the database
@@ -87,11 +87,13 @@ public class ReinbursementDAOImp implements ReinbursementDAO{
 					stmt.setInt(7, rein.getResolver());
 					stmt.setInt(8, rein.getStatusId());
 					stmt.setInt(9, rein.getTypeId());
+					stmt.setInt(10, rein.getReinbursementId());
+					
 					
 					stmt.execute();
 				} catch(SQLException ex) {
 					
-					System.out.println("Unable to update all users " + ex.getMessage());
+					System.out.println("Unable to change the status of reimbursement " + ex.getMessage());
 					return false;
 				}
 				
@@ -119,7 +121,7 @@ public class ReinbursementDAOImp implements ReinbursementDAO{
 			
 		
 				int reinbursementId = rs.getInt("rein_id");
-				int amount = rs.getInt("rein_amount");			
+				double amount = rs.getDouble("rein_amount");			
 				String timeRes = rs.getString("rein_resolved");		
 				String timeSub = rs.getString("rein_submitted");
 				String decs = rs.getString("rein_description");		   

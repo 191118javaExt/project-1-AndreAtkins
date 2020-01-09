@@ -21,7 +21,13 @@ public class Driver {
 		
 		System.out.println("check");
 		
-		//Users user2 = new Users("Malcolm", "Waters", "mwaters2001", "basketball13", "mwaters1001@gmail.com", 2, 100, UserServices.getReinbursementsForUser(1));
+		String userpassword = "basketball13";
+		
+		int hash = userpassword.hashCode();
+		
+		String hashpass = Integer.toString(hash);
+		
+		Users user2 = new Users("Matt", "Scott", "mscott2001", hashpass, "mscott1001@gmail.com", 1, 100, UserServices.getReinbursementsForUser(1));
 		
 		
 		//System.out.println("check");
@@ -37,7 +43,7 @@ public class Driver {
 		
 		//us.addReinbursement(rein);
 		
-	    //UserServices.addUser(user2);
+	    UserServices.addUser(user2);
 	   
 	    //System.out.println(UserServices.getIdByUsername("johndoe2001"));
 	    

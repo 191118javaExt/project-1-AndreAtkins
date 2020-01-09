@@ -41,6 +41,16 @@
 		<servlet-name>ReinbursementServlet</servlet-name>
 		<url-pattern>/newReimbursement</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ApproveServlet</servlet-name>
+		<servlet-class>com.revature.web.ApproveServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ApproveServlet</servlet-name>
+		<url-pattern>/status</url-pattern>
+	</servlet-mapping>
 
 
 </web-app>

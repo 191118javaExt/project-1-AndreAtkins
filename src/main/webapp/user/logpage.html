@@ -83,23 +83,66 @@ padding 05%;
 </style>
  <script>
  
+ function handleReceipt(event)
+{
+	 var reader = new FileReader();
+	 
+	 let file = event.target.files[0];
+	 
+	 reader.onloadend = () => {
+		 var data = reader.result.split(",")[1];
+         sessionStorage.setItem("data", data);
+	 }
+	 
+	 if(file){
+		 reader.readAsDataURL(file);
+	 }
+	 
+}
  
-
+ 
+ 
+ 
+/*  function handle(event) {
+     var reader = new FileReader();
+     let file = event.target.files[0];
+     reader.onloadend = () => {
+         var data = reader.result.split(",")[1];
+         sessionStorage.setItem("data", data);
+         
+     }
+     if(file) {
+         reader.readAsDataURL(file)
+     }
+     
+ } */
+ 
+ 
+ 
+ 
+ 
     function submitReimbursement() {
     	
     	let form = document.reinform;
     	
-    	let amount = form.numbox.value;
+    	 let amount = form.numbox.value;
     	let description = form.description.value;
     	let typeID = form.select.value;
     	
-    	
+    	/*
     	let ReimbursementJSObject = {
     			amount: amount,  			
     			descr: description,
     			typeId: typeID,
+    			reimid: 0,
     			
-    	}
+    	} */
+    	
+    	let formData = new FormData();
+    	formData.append("amount", amount);
+    	formData.append("description", description);
+    	formData.append("typeID", typeID);
+    	formData.append("file", sessionStorage.getItem("data"));
     	
     	
     	let xhr = new XMLHttpRequest();
@@ -118,7 +161,7 @@ padding 05%;
     	};
     	
     	xhr.open("POST", "http://localhost:8080/pOne/newReimbursement");
-    	xhr.send(JSON.stringify(ReimbursementJSObject));
+    	xhr.send(formData);
     }
     </script>
      <script>
@@ -187,7 +230,7 @@ padding 05%;
 
   <div  class="form-group">
     <label style = "color: skyblue;" class= "btn btn-outline-dark" for="exampleFormControlFile1">Upload Receipts</label>
-    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+    <input type="file" class="form-control-file" id="exampleFormControlFile1" onchange="handleReceipt(event)">
   </div>
     
   
@@ -257,8 +300,34 @@ padding 05%;
   			console.log(wholeUser);
   			
   			let reims = wholeUser.userReimbursements;
+  			if(reims.length == 1){
+  			
+  				for(i = 0; i < reims.length; i++) {
+  					
+  					var tr = document.createElement('tr');
+  					
+  					tr.innerHTML ='<td>' + reims[i].reinbursementId + '</td>' +
+  	  				'<td>' + reims[i].timeSub + '</td>' +
+  	  				'<td>' + '$' + reims[i].amount + '</td>' +
+  	  				'<td>' + reims[i].typeId + '</td>' +
+  	  				'<td>' + reims[i].desc + '</td>' +
+  	  				'<td>' + reims[i].statusId + '</td>' +
+  	  				'<td>' + reims[i].resolver+ '</td>' +
+  	  				'<td>' + reims[i].timeRes + '</td>';
+  	  				reimbursementTable.appendChild(tr);
+  					
+  					
+  				}
+  				
+  				
+  				
+  			}
+  			
+  		
   			
   			var c = reims[reims.length- 1].timeSub == reims[reims.length - 2].timeSub;
+  			
+  			
   			
   			console.log(c);
   			console.log(!c);
