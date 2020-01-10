@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.revature.models.Users;
@@ -92,13 +93,22 @@ public class UserDAOImp implements UserDAO{
 
 					
 	                Users user1 = new Users(firstname, lastname, username, password, email, roleId, userId, UserServices.getReinbursementsForUser(userId));
-					passmap.put(username,password);
+					
+	                int pass = password.hashCode();
+	                
+	                String rpassword = Integer.toString(pass);
+	                
+	                passmap.put(username,password);
+	                
+	                
+	                
+					
 					//UserServices.addPassToMap(username, password);
 					
 	                user1.setFirstname(firstname);
-				    user1.setLastname(firstname);
-	                user1.setEmail(username );
-	                user1.setPassword( password);
+				    user1.setLastname(lastname);
+	                user1.setEmail(username);
+	                user1.setPassword(password);
 	                user1.setRoleId(roleId);
 	                user1.setUserId(userId);
 				}
@@ -242,6 +252,39 @@ public class UserDAOImp implements UserDAO{
 		return idtonamemap;
 			
 		
+	}
+
+	@Override
+	public ArrayList<String> getAllEmails() {
+		
+			  
+			ArrayList< String> emaillist =  new ArrayList< String>(); 
+			
+			try (Connection conn = ConnectionUtil.getConnection()) {
+					
+					String sql = "SELECT * FROM \"Project1\" .users;";
+			
+					Statement stmt = conn.createStatement();
+					
+					ResultSet rs = stmt.executeQuery(sql);
+					
+					
+					
+					while(rs.next()) {
+									
+						String email = rs.getString("email");		
+		                emaillist.add(email);
+		              
+					}
+					
+					rs.close();
+				} catch(SQLException e) {
+					System.out.println("Unable to retrieve all emails" + e.getMessage());
+					
+				}
+
+			return emaillist;
+				
 	}
 
 }

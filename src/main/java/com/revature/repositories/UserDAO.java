@@ -1,5 +1,6 @@
 package com.revature.repositories;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.revature.models.Users;
@@ -14,6 +15,7 @@ public interface UserDAO {
 	public boolean deleteUser(Users user);
     public HashMap<String, Integer> getIdMap();
     public HashMap<Integer,String> getNameByIdMap();
+    public ArrayList<String> getAllEmails();
     
 	
 }

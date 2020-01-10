@@ -284,7 +284,7 @@ padding 05%;
 
 
    <script>
-  	let displayname = document.getElementById('displayname');
+  	
   	let reimbursementTable = document.getElementById('ReimbursementTable');
   	let reimTable = document.getElementById('reimTable');
 
@@ -300,6 +300,13 @@ padding 05%;
   			console.log(wholeUser);
   			
   			let reims = wholeUser.userReimbursements;
+  			
+  			if (!reims){
+  				
+  				
+  			}else{
+  			
+  			
   			if(reims.length == 1){
   			
   				for(i = 0; i < reims.length; i++) {
@@ -482,7 +489,7 @@ padding 05%;
   				'<td>' + reims[i].timeRes + '</td>';
   				reimbursementTable.appendChild(tr);
   			};
-  			
+  			}
   			
   		}
   		}	

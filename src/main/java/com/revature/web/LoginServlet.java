@@ -62,6 +62,7 @@ public static ArrayList<Reinbursements> rlist = UserServices.getAllReinbursement
 		
 		boolean y = us.IsUser(username);
 		
+		System.out.println(y);
 		boolean z = false;
 		
 		
@@ -70,7 +71,8 @@ public static ArrayList<Reinbursements> rlist = UserServices.getAllReinbursement
 		if(y) {
 			
 		z =	us.validateLog(username, password);
-			
+		
+		System.out.println(z);
 		}		
 				
 		if(!y || !z) {
@@ -132,8 +134,9 @@ public static ArrayList<Reinbursements> rlist = UserServices.getAllReinbursement
 			
 			res.setContentType("application/json");	
 			
-				
-		    EmployeeDTO dto = UserServices.convertToDTO(user1);
+			res.setStatus(200);	
+		    
+			EmployeeDTO dto = UserServices.convertToDTO(user1);
 			
 			dto.setUserReim(rlist4);
 	      

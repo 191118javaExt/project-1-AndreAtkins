@@ -32,14 +32,79 @@
 			</form>
 				<div class="hr"></div>
 			</div>
+			<script>
+			function sendRegister() {
+				console.log("sendRegister started.");
+				//let loginForm = document.loginForm;
+				
+				
+				let firstname = document.getElementById("user10").value;
+				let lastname = document.getElementById("user20").value;
+				let username = document.getElementById("user3").value;
+				let password = document.getElementById("pass").value;
+				let email = document.getElementById("email2").value;
+				
+
+				console.log(username + password + firstname);
+				
+				let regTemplate = {
+						firstname: firstname,
+						lastname: lastname,
+						username: username,
+						password: password,
+						email: email,
+				
+				};
+				
+
+				let xhr = new XMLHttpRequest();
+			     
+				console.log(regTemplate);
+				
+				console.log(xhr.status);
+				
+				xhr.onreadystatechange = function() {
+					if(this.readyState === 4 && this.status === 200) {
+						console.log(this.status);
+						sessionStorage.setItem('currentUser', this.responseText);
+						window.location = "http://localhost:8080/pOne/user/logpage.html";
+					}
+					
+					if(this.readyState === 4 && this.status === 204) {
+						alert("Username already exists, chose a unique username or sign in");
+					}
+					
+					if(this.readyState === 4 && this.status === 418) {
+						sessionStorage.setItem('currentUser', this.responseText);
+						console.log(this.responseText);
+						window.location = "http://localhost:8080/pOne/user/manager.html";
+					}
+						
+					if(this.readyState === 4 && this.status === 208) {
+						alert("Email already belongs to a user, enter a unique email or sign in");
+					
+						
+					}
+				};
+
+				xhr.open("POST", "http://localhost:8080/pOne/register");
+
+				xhr.send(JSON.stringify(regTemplate));
+			}
+
+			
+			
+			</script>
+			
+			<form name = "regform" onsubmit = "sendRegister(event.preventDefault())">
 			<div class="sign-up-htm">
         <div class="group">
 					<label for="user" class="label">FirstName</label>
-					<input id="user1" type="text" class="input">
+					<input id="user10" type="text" class="input">
         </div>
         <div class="group">
 					<label for="user" class="label">LastName</label>
-					<input id="user2" type="text" class="input">
+					<input id="user20" type="text" class="input">
 				</div>
         <div class="group">
 					<label for="user" class="label">Username</label>
@@ -51,11 +116,12 @@
 				</div>
 				<div class="group">
 					<label for="pass" class="label">Email Address</label>
-					<input id="pass1" type="text" class="input">
+					<input id="email2" type="email" class="input">
 				</div>
 				<div class="group">
 					<input type="submit" class="button" value="Sign Up!">
 				</div>
+				</form>
 				<div class="hr"></div>
 			</div>
 		</div>

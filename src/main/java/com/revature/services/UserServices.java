@@ -246,7 +246,7 @@ public class UserServices {
 	}
 
 
-    public boolean IsUser(String user) {
+    public static boolean IsUser(String user) {
 		
     	
      boolean c = membermap.containsKey(user); 	  //is username in data base ?
@@ -259,14 +259,14 @@ public class UserServices {
 
     public boolean validateLog(String username, String password){
     	
+    HashMap<String, String> passmap = getUsersFromDataBaseMap();
 	
-	//boolean a = membermap.containsKey(username);  
 	
-	String  s = membermap.get(username);
+	String  s = passmap.get(username);
 	
 	//System.out.println(a);
-	System.out.println(s);
-	System.out.println(password);
+	System.out.println(s + "val");
+	System.out.println(password + "val");
 	
 	boolean b = s.equals(password); // does username match corresponding password?
 	System.out.println(b);
@@ -303,9 +303,14 @@ public class UserServices {
  
   public static int getIdByUsername(String username) {
 	  
-	  int id;
+	  int id = 0;
+	  
+	  if(idmap.containsKey(username)) {
 	  
 	  id = idmap.get(username);
+	  
+	  
+	  }
 	  
 	  return id;
 	  
@@ -332,6 +337,13 @@ public class UserServices {
   public boolean addReinbursement(Reinbursements rein) {
 	  
 	  return rd.addReinbursement(rein);
+	  
+  }
+  
+  public static ArrayList<String> getAllEmails(){
+	  
+	 return ud.getAllEmails(); 
+	  
 	  
   }
   
